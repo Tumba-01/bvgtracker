@@ -1,0 +1,117 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: auto; /* Add this line to enable scrolling when the content is larger than the viewport */
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 800px; /* Add this line to limit the maximum width of the container */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px; /* Add this line to add space between tables */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px; /* Reduce padding to 10px */
+    text-align: center;
+    white-space: nowrap; /* Add this line to prevent the text in the cells from wrapping */
+}
+
+@media screen and (max-width: 600px) {
+    th, td {
+        white-space: normal; /* Allow the text to wrap when the screen width is 600px or less */
+    }
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+img {
+    width: 50px;
+    height: 50px;
+}
+
+#stations {
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.station {
+    cursor: pointer;
+    background-color: #f2f2f4;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.station:hover {
+    background-color: #ddd;
+}
+
+/* General button style */
+.btn {
+    border: none;
+    font-family: 'Lato';
+    font-size: inherit;
+    color: inherit;
+    background: none;
+    cursor: pointer;
+    padding: 10px 50px;
+    display: inline-block;
+    margin: 15px 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    outline: none;
+    position: relative;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+    border-radius: 20px;
+  }
+  
+  .btn:after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+  }
+  /* Button 1 */
+  .btn-1 {
+    background: #1F3D74;
+    color: #fff;
+  }
+  
+  .btn-1:hover {
+    background: #11203d;
+  }
+  
+  #countdownText {
+    font-style: italic;
+    font-size: 0.8em;
+    color: #888;
+}
