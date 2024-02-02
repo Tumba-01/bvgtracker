@@ -90,9 +90,8 @@ function fetchBusData(stationId) {
                 var currentTime = new Date();
                 var timeDifference = Math.round((arrivalTime - currentTime) / 60000); // Convert to minutes
 
-                console.log('Bus Line Number:', busLineNumber);
-                console.log('Final Destination:', finalDestination);
-                console.log('Arrival Time:', timeDifference, '`');
+                // Determine the image based on the type of transport
+                var transportImage = bus.line.product + '.png';
 
                 // Create a new row and cells
                 var row = table.insertRow();
@@ -102,7 +101,7 @@ function fetchBusData(stationId) {
                 var cell4 = row.insertCell();
 
                 // Add the bus information to the cells
-                cell1.innerHTML = '<img src="bus_img.png" alt="Bus Image">';
+                cell1.innerHTML = `<img src="${transportImage}" alt="Transport Image">`;
                 cell2.innerHTML = `<b style="font-size: 1.5em;">${busLineNumber}</b>`; // Make the line number bold and larger
                 cell3.innerHTML = `<i>${finalDestination}</i>`; // Make the final destination italic
 
@@ -114,9 +113,10 @@ function fetchBusData(stationId) {
                 } else {
                     cell4.innerHTML = `<b style="font-size: 1.5em;">${timeDifference}` + '`</b>'; // Make the time bold
                 }
+
+            
             });
         })
-        
         .catch(error => {
             // Handle the error here
             console.error('Error:', error);
@@ -131,3 +131,68 @@ document.getElementById('toggleButton').addEventListener('click', function() {
         stationsSection.style.display = 'none';
     }
 });
+
+document.getElementById('searchButton').addEventListener('click', function() {
+    var searchQuery = document.getElementById('searchInput').value;
+    
+    // Unhide the stationsSection when the search button is clicked
+    var stationsSection = document.getElementById('stationsSection');
+    stationsSection.style.display = 'block';
+
+    searchStations(searchQuery);
+});
+
+function searchStations(query) {
+    fetch(`https://v5.bvg.transport.rest/locations?query=${query}&type=stop`)
+        .then(response => response.json())
+        .then(data => {
+            // Clear the stationsDiv
+            var stationsDiv = document.getElementById('stationsSection');
+            while (stationsDiv.firstChild) {
+                stationsDiv.removeChild(stationsDiv.firstChild);
+            }
+
+            // Loop through the data and add each station name to the div
+            data.forEach(station => {
+                var p = document.createElement('p');
+                p.textContent = station.name;
+                p.className = 'station';
+                p.addEventListener('click', function() {
+                    // Handle click event here
+                    console.log('Station clicked:', station.name, 'Station ID:', station.id);
+
+                    // Hide the stationsSection when a station is clicked
+                    stationsDiv.style.display = 'none';
+
+                    // Clear any existing refresh interval
+                    clearInterval(refreshInterval);
+
+                    // Fetch bus arrival data when a station is clicked
+                    fetchBusData(station.id);
+
+                    // Set up the refresh interval to fetch new data every 60 seconds
+                    refreshInterval = setInterval(function() {
+                        fetchBusData(station.id);
+                    }, 60000);
+
+                    // Set up the countdown
+                    countdown = 60;
+                    var countdownElement = document.getElementById('refreshCountdown');
+                    countdownElement.id = 'countdownText'; // Add this line
+                    countdownElement.textContent = 'Refreshing in ' + countdown + ' seconds';
+                    var countdownInterval = setInterval(function() {
+                        countdown--;
+                        countdownElement.textContent = 'Refreshing in ' + countdown + ' seconds';
+                        if (countdown === 0) {
+                            countdown = 60;
+                        }
+                    }, 1000);
+                });
+                stationsDiv.appendChild(p);
+            });
+        })
+        .catch(error => {
+            // Handle the error here
+            console.error('Error:', error);
+        });
+}
