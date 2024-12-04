@@ -71,7 +71,7 @@ if (navigator.geolocation) {
 }
 
 function fetchBusData(stationId) {
-    fetch(`https://v5.bvg.transport.rest/stops/${stationId}/arrivals?duration=20`)
+    fetch(`https://v6.bvg.transport.rest/stops/${stationId}/arrivals?duration=20`)
         .then(response => response.json())
         .then(data => {
             // Get the table from the HTML
@@ -143,7 +143,7 @@ document.getElementById('searchButton').addEventListener('click', function() {
 });
 
 function searchStations(query) {
-    fetch(`https://v5.bvg.transport.rest/locations?query=${query}&type=stop`)
+    fetch(`https://v6.bvg.transport.rest/locations?query=${query}&type=stop`)
         .then(response => response.json())
         .then(data => {
             // Clear the stationsDiv
